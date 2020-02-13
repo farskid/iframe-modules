@@ -1,0 +1,40 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Page 2</title>
+    <script src="https://unpkg.com/htm"></script>
+    <script src="https://unpkg.com/vhtml"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        const html = htm.bind(vhtml);
+        const $root = document.getElementById('app')
+        let bridge;
+
+        render()
+
+        window.addEventListener("bridge_ready", e => {
+            console.log('bridge is ready')
+            bridge = e.detail;
+            render()
+        });
+
+        function render() {
+            const output = !bridge ? html`<h1>Waiting for bridge... (intentional delay)</h1>` : html`
+            <h1>Page 2</h1>
+            <h3>Pure HTML app</h3>
+            <button id="btn" onclick="bridge.pushUrl(' /page2')">
+                Click me to add <code>/page2</code> to parent url
+            </button>
+            `
+            $root.innerHTML = Array.isArray(output) ? output.join('') : output
+        }
+    </script>
+</body>
+
+</html>
