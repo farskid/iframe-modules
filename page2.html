@@ -11,6 +11,7 @@
 
 <body>
     <div id="app"></div>
+
     <script>
         const html = htm.bind(vhtml);
         const $root = document.getElementById('app')
@@ -24,11 +25,12 @@
             render()
         });
 
+
         function render() {
             const output = !bridge ? html`<h1>Waiting for bridge... (intentional delay)</h1>` : html`
             <h1>Page 2</h1>
             <h3>Pure HTML app</h3>
-            <button id="btn" onclick="bridge.pushUrl(' /page2')">
+            <button id="btn" onclick="window.history.pushState(null, '','/page2')">
                 Click me to add <code>/page2</code> to parent url
             </button>
             `

@@ -1,10 +1,4 @@
 const devPortalBridge = {
-  pushUrl(url) {
-    window.history.pushState(null, "", url);
-  },
-  popUrl(step = -1) {
-    window.history.go(step);
-  },
   getOrganization() {
     return "amir-testing-org";
   },
@@ -45,11 +39,14 @@ function setIframe(src, name) {
     // iframe.contentWindow.postMessage(JSON.stringify(devPortalBridge), src);
     // console.log("replacing DevPortal");
     // iframe.contentWindow.DevPortal = window.DevPortal;
-    setTimeout(() => {
-      iframe.contentWindow.dispatchEvent(
-        new CustomEvent("bridge_ready", { detail: devPortalBridge })
-      );
-    }, 1000);
+    // iframe.contentWindow.addEventListener("");
+    const originalHistory = iframe.contentWindow.history.pushState;
+    iframe.contentWindow.history.pushState = function() {
+      originalHistory.apply(history, arguments);
+    };
+    iframe.contentWindow.dispatchEvent(
+      new CustomEvent("bridge_ready", { detail: devPortalBridge })
+    );
   });
   //   iframeRef.document.onreadystatechange(() => {
   //     // only access when loaded
